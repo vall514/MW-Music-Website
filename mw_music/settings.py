@@ -37,6 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third-party apps (installed with pip, but MUST be added here)
+    'crispy_forms',           # ← REQUIRED
+    'crispy_bootstrap4',      # ← REQUIRED
+    'ckeditor',               # ← REQUIRED
+    'ckeditor_uploader',      # ← REQUIRED
+    
+    # Your local apps
+    'core',
+    'music',
+    'media',
+    'events',
+    'blog',
+    'store',
 ]
 
 MIDDLEWARE = [
@@ -118,5 +131,31 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# CKEditor
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    },
+}
+
+# Crispy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email settings (for contact form)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
