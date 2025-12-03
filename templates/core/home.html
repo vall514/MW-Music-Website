@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative" style="height: 600px; overflow: hidden;">
+    {% if site_settings.hero_image %}
+        <img src="{{ site_settings.hero_image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="Hero">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center">
+    {% else %}
+        <div class="bg-dark text-white d-flex align-items-center h-100">
+    {% endif %}
+            <div class="container text-center text-white">
+                <h1 class="display-1 fw-bold mb-4">{{ site_settings.site_name }}</h1>
+                <p class="lead fs-3 mb-4">{{ site_settings.tagline }}</p>
+                <div class="mt-4">
+                    <a href="{% url 'music:list' %}" class="btn btn-primary btn-lg me-3">Listen Now</a>
+                    <a href="{% url 'events:list' %}" class="btn btn-outline-light btn-lg">View Events</a>
+                </div>
+            </div>
+        </div>
+</section>
+
+<!-- Latest Music Release -->
+{% if latest_album %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Latest Release</h2>
+            <p class="lead">Check out my newest music</p>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <img src="{{ latest_album.cover_art.url }}" class="img-fluid rounded shadow" alt="{{ latest_album.title }}">
+            </div>
+            <div class="col-md-7">
+                <span class="badge bg-primary mb-2">{{ latest_album.get_album_type_display }}</span>
+                <h3 class="display-6 mb-3">{{ latest_album.title }}</h3>
+                <p class="text-muted mb-3">Released: {{ latest_album.release_date|date:"F d, Y" }}</p>
+                <div class="mb-4">{{ latest_album.description|safe|truncatewords:50 }}</div>
+                <div class="d-flex gap-3 mb-3">
+                    {% if latest_album.spotify_url %}
+                        <a href="{{ latest_album.spotify_url }}" target="_blank" class="btn btn-success">
+                            <i class="fab fa-spotify"></i> Spotify
+                        </a>
+                    {% endif %}
+                    {% if latest_album.youtube_url %}
+                        <a href="{{ latest_album.youtube_url }}" target="_blank" class="btn btn-danger">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </a>
+                    {% endif %}
+                    {% if latest_album.apple_music_url %}
+                        <a href="{{ latest_album.apple_music_url }}" target="_blank" class="btn btn-dark">
+                            <i class="fab fa-apple"></i> Apple Music
+                        </a>
+                    {% endif %}
+                </div>
+                <a href="{% url 'music:detail' latest_album.pk %}" class="btn btn-outline-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Upcoming Events -->
+{% if upcoming_events %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Upcoming Events</h2>
+            <p class="lead">Join me at these upcoming events</p>
+        </div>
+        <div class="row">
+            {% for event in upcoming_events %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <span class="badge bg-info mb-2">{{ event.get_event_type_display }}</span>
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <p class="text-muted mb-2">
+                            <i class="far fa-calendar"></i> {{ event.date|date:"F d, Y" }}<br>
+                            <i class="fas fa-map-marker-alt"></i> {{ event.venue }}, {{ event.city }}
+                        </p>
+                        <p class="card-text">{{ event.description|safe|truncatewords:20 }}</p>
+                        <a href="{% url 'events:detail' event.pk %}" class="btn btn-primary btn-sm">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'events:list' %}" class="btn btn-outline-primary">View All Events</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">What People Say</h2>
+            <p class="lead">Testimonials from churches and event organizers</p>
+        </div>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        {% if testimonial.image %}
+                            <img src="{{ testimonial.image.url }}" class="rounded-circle mb-3" width="80" height="80" style="object-fit: cover;" alt="{{ testimonial.name }}">
+                        {% else %}
+                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                                {{ testimonial.name|first }}
+                            </div>
+                        {% endif %}
+                        <p class="fst-italic">"{{ testimonial.text }}"</p>
+                        <h6 class="mb-0">{{ testimonial.name }}</h6>
+                        <small class="text-muted">{{ testimonial.organization }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-4">Book MW Music for Your Event</h2>
+        <p class="lead mb-4">Bring inspiring gospel music to your church or event</p>
+        <a href="{% url 'contact' %}" class="btn btn-light btn-lg">Get in Touch</a>
+    </div>
+</section>
+{% endblock %}

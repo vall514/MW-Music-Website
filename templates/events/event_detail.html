@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }} - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<!-- Event Header -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <span class="badge bg-info mb-3">{{ event.get_event_type_display }}</span>
+                <h1 class="display-4 fw-bold mb-3">{{ event.title }}</h1>
+                {% if not event.is_past %}
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-calendar-check"></i> This event is coming up!
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Event Details -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <img src="{{ event.image.url }}" class="img-fluid rounded shadow-sm mb-4" alt="{{ event.title }}">
+                
+                <h3 class="mb-4">Event Details</h3>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        {{ event.description|safe }}
+                    </div>
+                </div>
+
+                {% if event.gallery.all %}
+                <h3 class="mb-4">Event Gallery</h3>
+                <div class="row g-3 mb-4">
+                    {% for photo in event.gallery.all %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="gallery-item position-relative">
+                            <img src="{{ photo.image.url }}" class="img-fluid rounded" alt="{{ photo.caption }}" style="cursor: pointer;">
+                            {% if photo.caption %}
+                            <div class="gallery-overlay">
+                                <p class="text-white text-center px-3">{{ photo.caption }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Event Info Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-info-circle"></i> Event Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2"><i class="far fa-calendar"></i> Date & Time</h6>
+                            <p class="mb-0"><strong>{{ event.date|date:"l, F d, Y" }}</strong></p>
+                            <p class="mb-0">{{ event.date|date:"g:i A" }}</p>
+                            {% if event.end_date %}
+                                <p class="mb-0 text-muted small">Ends: {{ event.end_date|date:"g:i A" }}</p>
+                            {% endif %}
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2"><i class="fas fa-map-marker-alt"></i> Location</h6>
+                            <p class="mb-1"><strong>{{ event.venue }}</strong></p>
+                            <p class="mb-0">{{ event.address }}</p>
+                            <p class="mb-0">{{ event.city }}, {{ event.country }}</p>
+                        </div>
+
+                        {% if not event.is_past %}
+                        <hr>
+                        
+                        <!-- Countdown Timer -->
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-3"><i class="far fa-clock"></i> Time Until Event</h6>
+                            <div data-countdown="{{ event.date|date:'c' }}"></div>
+                        </div>
+
+                        {% if event.ticket_url %}
+                        <a href="{{ event.ticket_url }}" target="_blank" class="btn btn-success w-100 mb-2">
+                            <i class="fas fa-ticket-alt"></i> Get Tickets
+                        </a>
+                        {% endif %}
+
+                        <button class="btn btn-primary w-100" data-share="{{ request.build_absolute_uri }}" data-share-title="{{ event.title }}">
+                            <i class="fas fa-share-alt"></i> Share Event
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Add to Calendar -->
+                {% if not event.is_past %}
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="mb-3">Add to Calendar</h6>
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-google"></i> Google Calendar
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="fab fa-apple"></i> Apple Calendar
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-sm">
+                                <i class="far fa-calendar"></i> Outlook
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back Button -->
+<section class="py-4 bg-light">
+    <div class="container text-center">
+        <a href="{% url 'events:list' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Back to All Events
+        </a>
+    </div>
+</section>
+{% endblock %}

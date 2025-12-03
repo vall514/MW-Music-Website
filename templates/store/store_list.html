@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Store - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold">Store</h1>
+        <p class="lead">Support the ministry through merchandise and donations</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Products Section -->
+    {% if products %}
+        <h2 class="mb-4">Merchandise & Resources</h2>
+        
+        <!-- Filter by Category -->
+        <div class="mb-4">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" data-filter="all">All Products</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="merchandise">Merchandise</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="music">Music</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="resources">Resources</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="other">Other</button>
+            </div>
+        </div>
+
+        <div class="row mb-5" id="productGrid">
+            {% for product in products %}
+            <div class="col-lg-4 col-md-6 mb-4 product-item" data-category="{{ product.category }}">
+                <div class="card h-100 shadow-sm product-card">
+                    {% if not product.available or product.stock == 0 %}
+                        <div class="out-of-stock">Out of Stock</div>
+                    {% endif %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 300px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge bg-info mb-2 align-self-start">{{ product.get_category_display }}</span>
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.description|safe|truncatewords:20 }}</p>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="product-price">${{ product.price }}</span>
+                                {% if product.stock > 0 and product.stock <= 5 %}
+                                    <span class="badge bg-warning text-dark">Only {{ product.stock }} left</span>
+                                {% endif %}
+                            </div>
+                            {% if product.available and product.stock > 0 %}
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            {% else %}
+                                <button class="btn btn-secondary w-100" disabled>
+                                    Out of Stock
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5 mb-5">
+            <i class="fas fa-store fa-5x text-muted mb-4"></i>
+            <h3>Store Coming Soon</h3>
+            <p class="text-muted">Check back later for merchandise and resources!</p>
+        </div>
+    {% endif %}
+
+    <!-- Donation Section -->
+    <section class="py-5 bg-light rounded">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-5 fw-bold mb-4">Support the Ministry</h2>
+                    <p class="lead mb-4">Your donations help us continue spreading the gospel through music and reaching more people with messages of hope and worship.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Fund music production</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Support outreach programs</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Youth empowerment initiatives</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success"></i> Community events and concerts</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow border-0">
+                        <div class="card-body p-4">
+                            <h4 class="mb-4 text-center">Make a Donation</h4>
+                            <form method="post" action="#" class="needs-validation" novalidate>
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="donorName" class="form-label">Your Name (Optional)</label>
+                                    <input type="text" class="form-control" id="donorName" name="donor_name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="donorEmail" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="donorEmail" name="donor_email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Donation Amount ($)</label>
+                                    <input type="number" class="form-control" id="amount" name="amount" min="1" step="0.01" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message (Optional)</label>
+                                    <textarea class="form-control" id="message" name="message" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 btn-lg">
+                                    <i class="fas fa-heart"></i> Donate Now
+                                </button>
+                            </form>
+                            <p class="text-center text-muted small mt-3 mb-0">
+                                <i class="fas fa-lock"></i> Secure payment processing
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+// Product filter
+document.querySelectorAll('[data-filter]').forEach(button => {
+    button.addEventListener('click', function() {
+        // Update active button
+        document.querySelectorAll('[data-filter]').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filter = this.dataset.filter;
+        const items = document.querySelectorAll('.product-item');
+        
+        items.forEach(item => {
+            if (filter === 'all' || item.dataset.category === filter) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

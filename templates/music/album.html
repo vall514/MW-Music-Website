@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ album.title }} - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<!-- Album Header -->
+<div class="album-header text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <img src="{{ album.cover_art.url }}" class="img-fluid rounded shadow-lg" alt="{{ album.title }}">
+            </div>
+            <div class="col-md-8">
+                <span class="badge bg-light text-dark mb-2">{{ album.get_album_type_display }}</span>
+                <h1 class="display-3 fw-bold mb-3">{{ album.title }}</h1>
+                <p class="lead mb-4">
+                    <i class="far fa-calendar"></i> Released: {{ album.release_date|date:"F d, Y" }}
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if album.spotify_url %}
+                        <a href="{{ album.spotify_url }}" target="_blank" class="btn btn-success btn-lg">
+                            <i class="fab fa-spotify"></i> Listen on Spotify
+                        </a>
+                    {% endif %}
+                    {% if album.youtube_url %}
+                        <a href="{{ album.youtube_url }}" target="_blank" class="btn btn-danger btn-lg">
+                            <i class="fab fa-youtube"></i> Watch on YouTube
+                        </a>
+                    {% endif %}
+                    {% if album.apple_music_url %}
+                        <a href="{{ album.apple_music_url }}" target="_blank" class="btn btn-dark btn-lg">
+                            <i class="fab fa-apple"></i> Apple Music
+                        </a>
+                    {% endif %}
+                    {% if album.soundcloud_url %}
+                        <a href="{{ album.soundcloud_url }}" target="_blank" class="btn btn-warning btn-lg">
+                            <i class="fab fa-soundcloud"></i> SoundCloud
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Album Description -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="mb-4">About This Album</h2>
+                <div class="lead">
+                    {{ album.description|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Track List -->
+{% if album.songs.all %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4">Track List</h2>
+        <div class="card shadow-sm">
+            <ul class="list-group list-group-flush track-list">
+                {% for song in album.songs.all %}
+                <li class="list-group-item track-item">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="badge bg-primary rounded-circle" style="width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center;">
+                                {{ song.track_number }}
+                            </span>
+                        </div>
+                        <div class="col">
+                            <h5 class="mb-1">{{ song.title }}</h5>
+                            {% if song.story_behind %}
+                                <button class="btn btn-sm btn-link p-0 text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#song-{{ song.id }}-story">
+                                    Read story behind this song
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="col-auto">
+                            <span class="text-muted">{{ song.duration }}</span>
+                        </div>
+                        {% if song.audio_file %}
+                        <div class="col-auto">
+                            <audio controls preload="none" class="d-block" style="height: 35px;">
+                                <source src="{{ song.audio_file.url }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if song.story_behind %}
+                    <div class="collapse mt-3" id="song-{{ song.id }}-story">
+                        <div class="card card-body bg-light">
+                            <h6>Story Behind "{{ song.title }}"</h6>
+                            {{ song.story_behind|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if song.lyrics %}
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#lyrics-{{ song.id }}">
+                            <i class="fas fa-file-alt"></i> View Lyrics
+                        </button>
+                    </div>
+                    
+                    <!-- Lyrics Modal -->
+                    <div class="modal fade" id="lyrics-{{ song.id }}" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ song.title }} - Lyrics</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ song.lyrics|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Share & Back -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <button class="btn btn-primary btn-lg me-3" data-share="{{ request.build_absolute_uri }}" data-share-title="{{ album.title }} - {{ site_settings.site_name }}">
+            <i class="fas fa-share-alt"></i> Share This Album
+        </button>
+        <a href="{% url 'music:list' %}" class="btn btn-outline-primary btn-lg">
+            <i class="fas fa-arrow-left"></i> Back to Music
+        </a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}About - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold">About MW Music</h1>
+        <p class="lead">Gospel Musician Bringing Hope & Worship</p>
+    </div>
+</div>
+
+<!-- Bio Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                {% if site_settings.hero_image %}
+                    <img src="{{ site_settings.hero_image.url }}" class="img-fluid rounded shadow" alt="MW Music">
+                {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-user fa-5x text-muted"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-7">
+                <h2 class="display-5 fw-bold mb-4">My Story</h2>
+                <div class="lead">
+                    {{ site_settings.about_full|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Mission & Vision</h2>
+            <p class="lead">Faith, Youth Empowerment & Outreach</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-5">
+                        {{ site_settings.mission_vision|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Testimonials</h2>
+            <p class="lead">What churches and event organizers say</p>
+        </div>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm testimonial-card">
+                    <div class="card-body">
+                        {% if testimonial.image %}
+                            <img src="{{ testimonial.image.url }}" class="rounded-circle mb-3" width="80" height="80" style="object-fit: cover;" alt="{{ testimonial.name }}">
+                        {% else %}
+                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                                {{ testimonial.name|first }}
+                            </div>
+                        {% endif %}
+                        <p class="fst-italic mb-3">"{{ testimonial.text }}"</p>
+                        <h6 class="mb-0 text-primary">{{ testimonial.name }}</h6>
+                        <small class="text-muted">{{ testimonial.organization }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Press Kit -->
+<section class="py-5 bg-dark text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Press Kit</h2>
+        <p class="lead mb-4">Download professional photos, bio, and music samples for media use</p>
+        <a href="#" class="btn btn-light btn-lg">
+            <i class="fas fa-download"></i> Download Press Kit
+        </a>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-4">Let's Work Together</h2>
+        <p class="lead mb-4">Interested in booking MW Music for your event?</p>
+        <a href="{% url 'contact' %}" class="btn btn-light btn-lg">Get in Touch</a>
+    </div>
+</section>
+{% endblock %}

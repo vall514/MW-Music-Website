@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Events - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold">Events</h1>
+        <p class="lead">Join me at upcoming performances and outreach events</p>
+    </div>
+</div>
+
+<!-- Upcoming Events -->
+{% if upcoming_events %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-5 text-center">Upcoming Events</h2>
+        <div class="row">
+            {% for event in upcoming_events %}
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ event.image.url }}" class="img-fluid h-100 w-100" style="object-fit: cover;" alt="{{ event.title }}">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-info">{{ event.get_event_type_display }}</span>
+                                    {% if event.is_featured %}
+                                        <span class="badge bg-warning text-dark">Featured</span>
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title">{{ event.title }}</h5>
+                                <div class="mb-3">
+                                    <p class="mb-1">
+                                        <i class="far fa-calendar text-primary"></i> 
+                                        <strong>{{ event.date|date:"l, F d, Y" }}</strong>
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="far fa-clock text-primary"></i> 
+                                        {{ event.date|date:"g:i A" }}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-map-marker-alt text-primary"></i> 
+                                        {{ event.venue }}, {{ event.city }}
+                                    </p>
+                                </div>
+                                <p class="card-text small">{{ event.description|safe|truncatewords:20 }}</p>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'events:detail' event.pk %}" class="btn btn-primary btn-sm">
+                                        View Details
+                                    </a>
+                                    {% if event.ticket_url %}
+                                        <a href="{{ event.ticket_url }}" target="_blank" class="btn btn-success btn-sm">
+                                            <i class="fas fa-ticket-alt"></i> Get Tickets
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="py-5">
+    <div class="container text-center">
+        <i class="fas fa-calendar-times fa-5x text-muted mb-4"></i>
+        <h3>No Upcoming Events</h3>
+        <p class="text-muted">Check back soon for new event announcements!</p>
+    </div>
+</section>
+{% endif %}
+
+<!-- Past Events -->
+{% if past_events %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-5 text-center">Past Events Highlights</h2>
+        <div class="row">
+            {% for event in past_events %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ event.image.url }}" class="card-img-top" style="height: 250px; object-fit: cover;" alt="{{ event.title }}">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">{{ event.get_event_type_display }}</span>
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <p class="text-muted mb-2">
+                            <i class="far fa-calendar"></i> {{ event.date|date:"F d, Y" }}<br>
+                            <i class="fas fa-map-marker-alt"></i> {{ event.venue }}, {{ event.city }}
+                        </p>
+                        <a href="{% url 'events:detail' event.pk %}" class="btn btn-outline-primary btn-sm">
+                            View Recap
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Booking CTA -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-4">Book MW Music for Your Event</h2>
+        <p class="lead mb-4">Available for churches, conferences, and special events</p>
+        <a href="{% url 'contact' %}" class="btn btn-light btn-lg">Request Booking</a>
+    </div>
+</section>
+{% endblock %}
