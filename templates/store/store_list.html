@@ -4,7 +4,7 @@
 
 {% block content %}
 <!-- Hero Section -->
-<div class="bg-primary text-white py-5 mb-5">
+<div class="text-white py-5 mb-5" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 50%, #e5c4a1 100%);">
     <div class="container text-center">
         <h1 class="display-3 fw-bold">Store</h1>
         <p class="lead">Support the ministry through merchandise and donations</p>
@@ -19,11 +19,11 @@
         <!-- Filter by Category -->
         <div class="mb-4">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-outline-primary active" data-filter="all">All Products</button>
-                <button type="button" class="btn btn-outline-primary" data-filter="merchandise">Merchandise</button>
-                <button type="button" class="btn btn-outline-primary" data-filter="music">Music</button>
-                <button type="button" class="btn btn-outline-primary" data-filter="resources">Resources</button>
-                <button type="button" class="btn btn-outline-primary" data-filter="other">Other</button>
+                <button type="button" class="btn btn-outline-secondary active" data-filter="all">All Products</button>
+                <button type="button" class="btn btn-outline-secondary" data-filter="merchandise">Merchandise</button>
+                <button type="button" class="btn btn-outline-secondary" data-filter="music">Music</button>
+                <button type="button" class="btn btn-outline-secondary" data-filter="resources">Resources</button>
+                <button type="button" class="btn btn-outline-secondary" data-filter="other">Other</button>
             </div>
         </div>
 
@@ -47,7 +47,7 @@
                                 {% endif %}
                             </div>
                             {% if product.available and product.stock > 0 %}
-                                <button class="btn btn-primary w-100">
+                                <button class="btn w-100" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); color: white; border: none; border-radius: 50px; font-weight: 600;">
                                     <i class="fas fa-shopping-cart"></i> Add to Cart
                                 </button>
                             {% else %}
@@ -105,7 +105,7 @@
                                     <label for="message" class="form-label">Message (Optional)</label>
                                     <textarea class="form-control" id="message" name="message" rows="3"></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-success w-100 btn-lg">
+                                <button type="submit" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); color: white; border: none; border-radius: 50px; font-weight: 700;">
                                     <i class="fas fa-heart"></i> Donate Now
                                 </button>
                             </form>

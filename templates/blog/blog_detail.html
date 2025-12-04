@@ -63,6 +63,78 @@
                     <div class="col-md-4 mb-3">
                         <div class="card shadow-sm h-100">
                             <img src="{{ recent_post.featured_image.url }}" class="card-img-top" alt="{{ recent_post.title }}" style="height: 150px; object-fit: cover;">
+                            <di class="card-body">
+                                <h6 class="card-title">
+                                    <a href="{% url 'blog:detail' recent_post.slug %}" class="text-decoration-none text-dark">
+                                        {{ recent_post.title|truncatewords:8 }}
+                                    </a>
+                                </h6>
+                                <small class="text-muted">{{ recent_post.created_at|date:"M d, Y" }}</small>
+                            </di{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Post Header -->
+            <article>
+                <header class="mb-5">
+                    <span class="badge mb-3" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); color: white;">{{ post.get_category_display }}</span>
+                    <h1 class="display-4 fw-bold mb-3">{{ post.title }}</h1>
+                    
+                    <div class="d-flex justify-content-between align-items-center text-muted mb-4">
+                        <span>
+                            <i class="fas fa-user"></i> {{ post.author }}
+                        </span>
+                        <span>
+                            <i class="far fa-calendar"></i> {{ post.created_at|date:"F d, Y" }}
+                        </span>
+                        {% if post.created_at != post.updated_at %}
+                        <span>
+                            <i class="fas fa-sync-alt"></i> Updated {{ post.updated_at|date:"M d, Y" }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <img src="{{ post.featured_image.url }}" class="img-fluid rounded shadow-sm mb-4" alt="{{ post.title }}">
+                    
+                    <p class="lead">{{ post.excerpt }}</p>
+                </header>
+
+                <!-- Post Content -->
+                <div class="post-content mb-5">
+                    {{ post.content|safe }}
+                </div>
+
+                <!-- Share Buttons -->
+                <div class="card bg-light mb-4">
+                    <div class="card-body text-center">
+                        <h5 class="mb-3">Share this post</h5>
+                        <button class="btn" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); color: white; border: none; border-radius: 50px; font-weight: 600;" data-share="{{ request.build_absolute_uri }}" data-share-title="{{ post.title }}">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'blog:list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Blog
+                    </a>
+                </div>
+            </article>
+
+            <!-- Recent Posts Sidebar -->
+            {% if recent_posts %}
+            <aside class="mt-5">
+                <h3 class="mb-4">Recent Posts</h3>
+                <div class="row">
+                    {% for recent_post in recent_posts %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <img src="{{ recent_post.featured_image.url }}" class="card-img-top" alt="{{ recent_post.title }}" style="height: 150px; object-fit: cover;">
                             <div class="card-body">
                                 <h6 class="card-title">
                                     <a href="{% url 'blog:detail' recent_post.slug %}" class="text-decoration-none text-dark">
@@ -71,6 +143,16 @@
                                 </h6>
                                 <small class="text-muted">{{ recent_post.created_at|date:"M d, Y" }}</small>
                             </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </aside>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}v>
                         </div>
                     </div>
                     {% endfor %}

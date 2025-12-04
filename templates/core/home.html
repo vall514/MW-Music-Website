@@ -2,123 +2,253 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section position-relative" style="height: 600px; overflow: hidden;">
-    {% if site_settings.hero_image %}
-        <img src="{{ site_settings.hero_image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="Hero">
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center">
-    {% else %}
-        <div class="bg-dark text-white d-flex align-items-center h-100">
+<!-- Hero Section with Video/Image Background -->
+<section class="hero-section-home position-relative overflow-hidden">
+    <!-- Background Video or Image -->
+    {% if site_settings.hero_video_url %}
+        <div class="hero-video-wrapper">
+            <iframe src="{{ site_settings.hero_video_url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    {% elif site_settings.hero_image %}
+        <div class="hero-image-wrapper">
+            <img src="{{ site_settings.hero_image.url }}" alt="MW Music">
+        </div>
     {% endif %}
-            <div class="container text-center text-white">
-                <h1 class="display-1 fw-bold mb-4">{{ site_settings.site_name }}</h1>
-                <p class="lead fs-3 mb-4">{{ site_settings.tagline }}</p>
-                <div class="mt-4">
-                    <a href="{% url 'music:list' %}" class="btn btn-primary btn-lg me-3">Listen Now</a>
-                    <a href="{% url 'events:list' %}" class="btn btn-outline-light btn-lg">View Events</a>
+    
+    <!-- Gradient Overlay -->
+    <div class="hero-overlay"></div>
+    
+    <!-- Hero Content -->
+    <div class="hero-content">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10">
+                    <!-- Logo -->
+                    {% if site_settings.logo %}
+                        <div class="hero-logo animate-fade-up mb-4">
+                            <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_name }}" class="img-fluid">
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Site Name -->
+                    <h1 class="hero-title animate-fade-up delay-1">{{ site_settings.site_name }}</h1>
+                    
+                    <!-- Tagline -->
+                    <p class="hero-tagline animate-fade-up delay-2">{{ site_settings.tagline }}</p>
+                    
+                    <!-- Short Intro -->
+                    <p class="hero-intro animate-fade-up delay-3">{{ site_settings.about_short }}</p>
+                    
+                    <!-- Call to Action Buttons -->
+                    <div class="hero-buttons animate-fade-up delay-4">
+                        <a href="{% url 'music:list' %}" class="btn btn-hero btn-primary">
+                            <i class="fas fa-music"></i> Listen Now
+                        </a>
+                        {% if latest_album.youtube_url %}
+                            <a href="{{ latest_album.youtube_url }}" target="_blank" class="btn btn-hero btn-danger">
+                                <i class="fab fa-youtube"></i> Watch Video
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'contact' %}" class="btn btn-hero btn-light">
+                            <i class="fas fa-calendar-check"></i> Book a Show
+                        </a>
+                    </div>
+                    
+                    <!-- Social Media Icons -->
+                    <div class="hero-social animate-fade-up delay-5">
+                        {% if site_settings.facebook_url %}
+                            <a href="{{ site_settings.facebook_url }}" target="_blank" class="social-icon">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.instagram_url %}
+                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.youtube_url %}
+                            <a href="{{ site_settings.youtube_url }}" target="_blank" class="social-icon">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.twitter_url %}
+                            <a href="{{ site_settings.twitter_url }}" target="_blank" class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.spotify_url %}
+                            <a href="{{ site_settings.spotify_url }}" target="_blank" class="social-icon">
+                                <i class="fab fa-spotify"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Scroll Down Indicator -->
+                    <div class="scroll-indicator animate-fade-up delay-6">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
-<!-- Latest Music Release -->
-{% if latest_album %}
-<section class="py-5 bg-light">
+<!-- Newsletter Signup Bar -->
+<section class="newsletter-bar">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">Latest Release</h2>
-            <p class="lead">Check out my newest music</p>
-        </div>
         <div class="row align-items-center">
-            <div class="col-md-5">
-                <img src="{{ latest_album.cover_art.url }}" class="img-fluid rounded shadow" alt="{{ latest_album.title }}">
+            <div class="col-md-5 mb-3 mb-md-0">
+                <h4 class="mb-0"><i class="fas fa-envelope"></i> Stay Connected</h4>
+                <p class="mb-0 text-muted">Get updates on new music and events</p>
             </div>
             <div class="col-md-7">
-                <span class="badge bg-primary mb-2">{{ latest_album.get_album_type_display }}</span>
-                <h3 class="display-6 mb-3">{{ latest_album.title }}</h3>
-                <p class="text-muted mb-3">Released: {{ latest_album.release_date|date:"F d, Y" }}</p>
-                <div class="mb-4">{{ latest_album.description|safe|truncatewords:50 }}</div>
-                <div class="d-flex gap-3 mb-3">
-                    {% if latest_album.spotify_url %}
-                        <a href="{{ latest_album.spotify_url }}" target="_blank" class="btn btn-success">
-                            <i class="fab fa-spotify"></i> Spotify
-                        </a>
-                    {% endif %}
-                    {% if latest_album.youtube_url %}
-                        <a href="{{ latest_album.youtube_url }}" target="_blank" class="btn btn-danger">
-                            <i class="fab fa-youtube"></i> YouTube
-                        </a>
-                    {% endif %}
-                    {% if latest_album.apple_music_url %}
-                        <a href="{{ latest_album.apple_music_url }}" target="_blank" class="btn btn-dark">
-                            <i class="fab fa-apple"></i> Apple Music
-                        </a>
-                    {% endif %}
+                <form method="post" action="{% url 'newsletter_subscribe' %}" class="newsletter-form">
+                    {% csrf_token %}
+                    <div class="input-group input-group-lg">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-paper-plane"></i> Subscribe
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Music Release Highlight -->
+{% if latest_album %}
+<section class="latest-release py-5">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-subtitle">New Release</span>
+            <h2 class="section-title">Latest Music</h2>
+        </div>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="album-cover-wrapper">
+                    <img src="{{ latest_album.cover_art.url }}" class="img-fluid album-cover" alt="{{ latest_album.title }}">
+                    <div class="album-badge">
+                        <span>{{ latest_album.get_album_type_display }}</span>
+                    </div>
                 </div>
-                <a href="{% url 'music:detail' latest_album.pk %}" class="btn btn-outline-primary">View Details</a>
+            </div>
+            <div class="col-lg-6">
+                <div class="album-info">
+                    <span class="release-date"><i class="far fa-calendar"></i> Released {{ latest_album.release_date|date:"F Y" }}</span>
+                    <h3 class="album-title">{{ latest_album.title }}</h3>
+                    <div class="album-description">{{ latest_album.description|safe|truncatewords:40 }}</div>
+                    
+                    <!-- Streaming Platforms -->
+                    <div class="streaming-platforms mt-4">
+                        <p class="mb-3"><strong>Listen on:</strong></p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            {% if latest_album.spotify_url %}
+                                <a href="{{ latest_album.spotify_url }}" target="_blank" class="platform-btn spotify">
+                                    <i class="fab fa-spotify"></i> Spotify
+                                </a>
+                            {% endif %}
+                            {% if latest_album.youtube_url %}
+                                <a href="{{ latest_album.youtube_url }}" target="_blank" class="platform-btn youtube">
+                                    <i class="fab fa-youtube"></i> YouTube
+                                </a>
+                            {% endif %}
+                            {% if latest_album.apple_music_url %}
+                                <a href="{{ latest_album.apple_music_url }}" target="_blank" class="platform-btn apple">
+                                    <i class="fab fa-apple"></i> Apple Music
+                                </a>
+                            {% endif %}
+                            {% if latest_album.soundcloud_url %}
+                                <a href="{{ latest_album.soundcloud_url }}" target="_blank" class="platform-btn soundcloud">
+                                    <i class="fab fa-soundcloud"></i> SoundCloud
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'music:detail' latest_album.pk %}" class="btn btn-outline-primary btn-lg mt-4">
+                        View Full Album <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- Upcoming Events -->
+<!-- Upcoming Events Teaser -->
 {% if upcoming_events %}
-<section class="py-5">
+<section class="upcoming-events py-5 bg-pattern">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">Upcoming Events</h2>
-            <p class="lead">Join me at these upcoming events</p>
+        <div class="section-header text-center mb-5">
+            <span class="section-subtitle">Don't Miss Out</span>
+            <h2 class="section-title">Upcoming Events</h2>
         </div>
+        
         <div class="row">
             {% for event in upcoming_events %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}" style="height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <span class="badge bg-info mb-2">{{ event.get_event_type_display }}</span>
-                        <h5 class="card-title">{{ event.title }}</h5>
-                        <p class="text-muted mb-2">
-                            <i class="far fa-calendar"></i> {{ event.date|date:"F d, Y" }}<br>
-                            <i class="fas fa-map-marker-alt"></i> {{ event.venue }}, {{ event.city }}
-                        </p>
-                        <p class="card-text">{{ event.description|safe|truncatewords:20 }}</p>
-                        <a href="{% url 'events:detail' event.pk %}" class="btn btn-primary btn-sm">Learn More</a>
+                <div class="event-card">
+                    <div class="event-image-wrapper">
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                        <div class="event-date-badge">
+                            <span class="day">{{ event.date|date:"d" }}</span>
+                            <span class="month">{{ event.date|date:"M" }}</span>
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <span class="event-type">{{ event.get_event_type_display }}</span>
+                        <h4 class="event-title">{{ event.title }}</h4>
+                        <div class="event-details">
+                            <p><i class="far fa-clock"></i> {{ event.date|date:"g:i A" }}</p>
+                            <p><i class="fas fa-map-marker-alt"></i> {{ event.venue }}, {{ event.city }}</p>
+                        </div>
+                        <a href="{% url 'events:detail' event.pk %}" class="btn btn-event">
+                            Learn More <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        
         <div class="text-center mt-4">
-            <a href="{% url 'events:list' %}" class="btn btn-outline-primary">View All Events</a>
+            <a href="{% url 'events:list' %}" class="btn btn-primary btn-lg">
+                View All Events <i class="fas fa-calendar"></i>
+            </a>
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- Testimonials -->
+<!-- Testimonials Section -->
 {% if testimonials %}
-<section class="py-5 bg-light">
+<section class="testimonials-section py-5">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold">What People Say</h2>
-            <p class="lead">Testimonials from churches and event organizers</p>
+        <div class="section-header text-center mb-5">
+            <span class="section-subtitle">What People Say</span>
+            <h2 class="section-title">Testimonials</h2>
         </div>
+        
         <div class="row">
             {% for testimonial in testimonials %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p class="testimonial-text">"{{ testimonial.text }}"</p>
+                    <div class="testimonial-author">
                         {% if testimonial.image %}
-                            <img src="{{ testimonial.image.url }}" class="rounded-circle mb-3" width="80" height="80" style="object-fit: cover;" alt="{{ testimonial.name }}">
+                            <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
                         {% else %}
-                            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-                                {{ testimonial.name|first }}
-                            </div>
+                            <div class="author-initial">{{ testimonial.name|first }}</div>
                         {% endif %}
-                        <p class="fst-italic">"{{ testimonial.text }}"</p>
-                        <h6 class="mb-0">{{ testimonial.name }}</h6>
-                        <small class="text-muted">{{ testimonial.organization }}</small>
+                        <div>
+                            <h6>{{ testimonial.name }}</h6>
+                            <p>{{ testimonial.organization }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,12 +258,22 @@
 </section>
 {% endif %}
 
-<!-- Call to Action -->
-<section class="py-5 bg-primary text-white text-center">
+<!-- Final CTA Section -->
+<section class="final-cta py-5">
     <div class="container">
-        <h2 class="display-5 fw-bold mb-4">Book MW Music for Your Event</h2>
-        <p class="lead mb-4">Bring inspiring gospel music to your church or event</p>
-        <a href="{% url 'contact' %}" class="btn btn-light btn-lg">Get in Touch</a>
+        <div class="cta-box">
+            <div class="row align-items-center">
+                <div class="col-lg-8 text-center text-lg-start mb-4 mb-lg-0">
+                    <h2 class="cta-title">Ready to Book MW Music?</h2>
+                    <p class="cta-text">Bring inspiring gospel music to your church, conference, or special event</p>
+                </div>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <a href="{% url 'contact' %}" class="btn btn-cta">
+                        <i class="fas fa-phone-alt"></i> Get in Touch
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

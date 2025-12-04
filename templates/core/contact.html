@@ -4,79 +4,127 @@
 {% block title %}Contact - {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">Get in Touch</h1>
-        <p class="lead">Have a question or want to book MW Music for your event? Reach out!</p>
+<!-- Hero Section with Gradient -->
+<section class="text-white py-5" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 50%, #e5c4a1 100%);">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-3">Get in Touch</h1>
+        <p class="lead mb-0">Have a question or want to book MW Music for your event? We'd love to hear from you!</p>
     </div>
+</section>
 
+<div class="container py-5">
     <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="card shadow-sm border-0">
+        <!-- Contact Form -->
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+                <!-- Card Header with Gradient -->
+                <div class="card-header text-white py-4" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); border: none;">
+                    <h3 class="mb-0"><i class="fas fa-envelope"></i> Send a Message</h3>
+                </div>
                 <div class="card-body p-4">
-                    <h3 class="mb-4">Send a Message</h3>
                     <form method="post" class="needs-validation" novalidate>
                         {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">
+                        
+                        <div class="mb-3">
+                            <label for="id_name" class="form-label fw-bold">Your Name</label>
+                            <input type="text" name="name" class="form-control form-control-lg" id="id_name" placeholder="Enter your full name" required style="border-radius: 50px; border: 2px solid #e9ecef;">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label fw-bold">Email Address</label>
+                            <input type="email" name="email" class="form-control form-control-lg" id="id_email" placeholder="your.email@example.com" required style="border-radius: 50px; border: 2px solid #e9ecef;">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_message_type" class="form-label fw-bold">Message Type</label>
+                            <select name="message_type" class="form-select form-select-lg" id="id_message_type" required style="border-radius: 50px; border: 2px solid #e9ecef;">
+                                <option value="">Choose...</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="booking">Booking Request</option>
+                                <option value="press">Press/Media</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_subject" class="form-label fw-bold">Subject</label>
+                            <input type="text" name="subject" class="form-control form-control-lg" id="id_subject" placeholder="Brief subject line" required style="border-radius: 50px; border: 2px solid #e9ecef;">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_message" class="form-label fw-bold">Your Message</label>
+                            <textarea name="message" class="form-control form-control-lg" id="id_message" rows="6" placeholder="Tell us more about your inquiry..." required style="border-radius: 20px; border: 2px solid #e9ecef;"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); color: white; border: none; border-radius: 50px; font-weight: 700; padding: 1rem; box-shadow: 0 4px 16px rgba(168, 218, 220, 0.4); transition: all 0.3s ease;">
                             <i class="fas fa-paper-plane"></i> Send Message
                         </button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row mt-5">
-        <div class="col-md-4 text-center mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-envelope fa-3x text-primary"></i>
+        <!-- Contact Info Sidebar -->
+        <div class="col-lg-4">
+            <!-- Email Card -->
+            <div class="card border-0 shadow-sm mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3" style="width: 70px; height: 70px; margin: 0 auto; background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-envelope fa-2x text-white"></i>
                     </div>
-                    <h5>Email</h5>
-                    <p class="mb-0">
-                        <a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>
-                    </p>
+                    <h5 class="fw-bold mb-2">Email Us</h5>
+                    <p class="text-muted small mb-2">We'll respond within 24 hours</p>
+                    <a href="mailto:{{ site_settings.email }}" class="text-decoration-none" style="color: #a8dadc; font-weight: 600;">
+                        {{ site_settings.email }}
+                    </a>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4 text-center mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-phone fa-3x text-primary"></i>
+            <!-- Phone Card -->
+            <div class="card border-0 shadow-sm mb-4" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3" style="width: 70px; height: 70px; margin: 0 auto; background: linear-gradient(135deg, #f1c0b9 0%, #e5c4a1 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-phone fa-2x text-white"></i>
                     </div>
-                    <h5>Phone</h5>
-                    <p class="mb-0">
-                        <a href="tel:{{ site_settings.phone }}">{{ site_settings.phone }}</a>
-                    </p>
+                    <h5 class="fw-bold mb-2">Call Us</h5>
+                    <p class="text-muted small mb-2">Available during business hours</p>
+                    <a href="tel:{{ site_settings.phone }}" class="text-decoration-none" style="color: #f1c0b9; font-weight: 600;">
+                        {{ site_settings.phone }}
+                    </a>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4 text-center mb-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <i class="fas fa-share-alt fa-3x text-primary"></i>
+            <!-- Social Media Card -->
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3" style="width: 70px; height: 70px; margin: 0 auto; background: linear-gradient(135deg, #e5c4a1 0%, #a8dadc 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-share-alt fa-2x text-white"></i>
                     </div>
-                    <h5>Social Media</h5>
+                    <h5 class="fw-bold mb-3">Follow Us</h5>
                     <div class="d-flex justify-content-center gap-3">
                         {% if site_settings.facebook_url %}
-                            <a href="{{ site_settings.facebook_url }}" target="_blank" class="text-primary">
-                                <i class="fab fa-facebook fa-2x"></i>
+                            <a href="{{ site_settings.facebook_url }}" target="_blank" class="social-link" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(168, 218, 220, 0.2); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+                                <i class="fab fa-facebook fa-lg" style="color: #a8dadc;"></i>
                             </a>
                         {% endif %}
                         {% if site_settings.instagram_url %}
-                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="text-danger">
-                                <i class="fab fa-instagram fa-2x"></i>
+                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="social-link" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(241, 192, 185, 0.2); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+                                <i class="fab fa-instagram fa-lg" style="color: #f1c0b9;"></i>
                             </a>
                         {% endif %}
                         {% if site_settings.youtube_url %}
-                            <a href="{{ site_settings.youtube_url }}" target="_blank" class="text-danger">
-                                <i class="fab fa-youtube fa-2x"></i>
+                            <a href="{{ site_settings.youtube_url }}" target="_blank" class="social-link" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(229, 196, 161, 0.2); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+                                <i class="fab fa-youtube fa-lg" style="color: #e5c4a1;"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.twitter_url %}
+                            <a href="{{ site_settings.twitter_url }}" target="_blank" class="social-link" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(168, 218, 220, 0.2); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+                                <i class="fab fa-twitter fa-lg" style="color: #a8dadc;"></i>
+                            </a>
+                        {% endif %}
+                        {% if site_settings.spotify_url %}
+                            <a href="{{ site_settings.spotify_url }}" target="_blank" class="social-link" style="width: 45px; height: 45px; border-radius: 50%; background: rgba(241, 192, 185, 0.2); display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease;">
+                                <i class="fab fa-spotify fa-lg" style="color: #f1c0b9;"></i>
                             </a>
                         {% endif %}
                     </div>
@@ -85,4 +133,57 @@
         </div>
     </div>
 </div>
+
+<!-- Additional Info Section -->
+<section class="py-5" style="background: linear-gradient(135deg, rgba(168, 218, 220, 0.1) 0%, rgba(241, 192, 185, 0.1) 100%);">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <div class="mb-3" style="width: 60px; height: 60px; margin: 0 auto; background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-clock fa-lg text-white"></i>
+                    </div>
+                    <h5 class="fw-bold">Quick Response</h5>
+                    <p class="text-muted mb-0">We typically respond within 24 hours</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <div class="mb-3" style="width: 60px; height: 60px; margin: 0 auto; background: linear-gradient(135deg, #f1c0b9 0%, #e5c4a1 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-shield-alt fa-lg text-white"></i>
+                    </div>
+                    <h5 class="fw-bold">Privacy First</h5>
+                    <p class="text-muted mb-0">Your information is safe and secure</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4">
+                    <div class="mb-3" style="width: 60px; height: 60px; margin: 0 auto; background: linear-gradient(135deg, #e5c4a1 0%, #a8dadc 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-calendar-check fa-lg text-white"></i>
+                    </div>
+                    <h5 class="fw-bold">Easy Booking</h5>
+                    <p class="text-muted mb-0">Simple process for event bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .social-link:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #a8dadc !important;
+        box-shadow: 0 0 0 0.2rem rgba(168, 218, 220, 0.25) !important;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(168, 218, 220, 0.5) !important;
+    }
+</style>
 {% endblock %}

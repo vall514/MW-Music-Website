@@ -56,7 +56,7 @@
             <div class="col-lg-4">
                 <!-- Event Info Card -->
                 <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%);">
                         <h5 class="mb-0"><i class="fas fa-info-circle"></i> Event Information</h5>
                     </div>
                     <div class="card-body">
@@ -93,7 +93,7 @@
                         </a>
                         {% endif %}
 
-                        <button class="btn btn-primary w-100" data-share="{{ request.build_absolute_uri }}" data-share-title="{{ event.title }}">
+                        <button class="btn w-100" style="background: linear-gradient(135deg, #a8dadc 0%, #f1c0b9 100%); color: white; border: none; border-radius: 50px; font-weight: 600;" data-share="{{ request.build_absolute_uri }}" data-share-title="{{ event.title }}">
                             <i class="fas fa-share-alt"></i> Share Event
                         </button>
                         {% endif %}
